@@ -2,7 +2,6 @@
 import tornado.ioloop
 import tornado.web
 
-
 # write to screen
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
