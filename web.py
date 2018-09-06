@@ -5,7 +5,7 @@ import tornado.web
 # write to screen
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        self.render('index.html')
+        self.render('web/index.html')
 
 # r"/" == root website address
 application = tornado.web.Application([(r"/", MainHandler)])
