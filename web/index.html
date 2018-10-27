@@ -5,7 +5,7 @@
     <!--- basic page needs
     ================================================== -->
     <meta charset="utf-8">
-    <title>Transcend</title>
+    <title>Web services test</title>
     <meta name="description" content="">
     <meta name="author" content="">
 
@@ -23,6 +23,7 @@
     ================================================== -->
     <script src="js/modernizr.js"></script>
     <script src="js/pace.min.js"></script>
+    <script src="js/pace.min.js"></script>
 
     <!-- favicons
     ================================================== -->
@@ -39,7 +40,7 @@
 
         <div class="header-logo">
             <a class="site-logo" href="index.html">
-                <img src="images/logo.svg" alt="Homepage">
+                <img src="images/ventilator.gif" alt="Homepage">
             </a>
         </div> <!-- end header-logo -->
 
@@ -48,18 +49,24 @@
             <a href="#0" class="header-nav__close" title="close"><span>Close</span></a>
 
             <div class="header-nav__content">
-                <h3>Transcend Studio</h3>
+                <h3>WS testovanie</h3>
                 
                 <ul class="header-nav__list">
                     <li class="current"><a class="smoothscroll"  href="#home" title="home">Home</a></li>
-                    <li><a class="smoothscroll"  href="#about" title="about">About</a></li>
-                    <li><a class="smoothscroll"  href="#services" title="services">Services</a></li>
-                    <li><a class="smoothscroll"  href="#works" title="works">Works</a></li>
-                    <li><a class="smoothscroll"  href="#contact" title="contact">Contact</a></li>
+                    <li><a class="smoothscroll"  href="#about" title="Ako to funguje">Ako to funguje</a></li>
+                    <li><a class="smoothscroll"  href="#services" title="Testovacie scenare">Testovacie scenare</a></li>
+                    <li><a class="smoothscroll"  href="#works" title="Statistika">Statistika</a></li>
+                    <li><a class="smoothscroll"  href="#contact" title="Zodpovedni ludia">Zodpovedni ludia</a></li>
                 </ul>
-    
+
+                <ul>
+                    <p>{{citat}}</p>
+                    <a href='#0'>{{citat_autor}}</a>
+                </ul>
+
+                <!--
                 <p>Perspiciatis hic praesentium nesciunt. Et neque a dolorum <a href='#0'>voluptatem</a> porro iusto sequi veritatis libero enim. Iusto id suscipit veritatis neque reprehenderit.</p>
-    
+
                 <ul class="header-nav__social">
                     <li>
                         <a href="#0"><i class="fab fa-facebook"></i></a>
@@ -77,6 +84,7 @@
                         <a href="#0"><i class="fab fa-dribbble"></i></a>
                     </li>
                 </ul>
+                -->
 
             </div> <!-- end header-nav__content -->
 
@@ -91,7 +99,7 @@
 
     <!-- home
     ================================================== -->
-    <section id="home" class="s-home target-section" data-parallax="scroll" data-image-src="images/hero-bg.jpg" data-natural-width=3000 data-natural-height=2000 data-position-y=top>
+    <section id="home" class="s-home target-section" data-parallax="scroll" data-image-src="images/Minimalist-Background.jpg" data-natural-width=1900 data-natural-height=1200 data-position-y=top>
 
         <div class="shadow-overlay"></div>
 
@@ -99,63 +107,37 @@
 
             <div class="row home-content__main">
                 <h1>
-                Hello folks, we are <br>
-                Transcend Studio.
+                Vitaj na stranke automatizovaneho testovania
                 </h1>
-
-                <p>
-                We create stunning digital experiences <br>
-                that will help your business stand out.
-                </p>
             </div> <!-- end home-content__main -->
 
         </div> <!-- end home-content -->
 
-        <ul class="home-sidelinks">
-            <li><a class="smoothscroll" href="#about">About<span>who we are</span></a></li>
-            <li><a class="smoothscroll" href="#services">Services<span>what we do</span></a></li>
-            <li><a  class="smoothscroll" href="#contact">Contact<span>get in touch</span></a></li>
-        </ul> <!-- end home-sidelinks -->
-
-        <ul class="home-social">
-            <li class="home-social-title">Follow Us</li>
-            <li><a href="#0">
-                <i class="fab fa-facebook"></i>
-                <span class="home-social-text">Facebook</span>
-            </a></li>
-            <li><a href="#0">
-                <i class="fab fa-twitter"></i>
-                <span class="home-social-text">Twitter</span>
-            </a></li>
-            <li><a href="#0">
-                <i class="fab fa-linkedin"></i>
-                <span class="home-social-text">LinkedIn</span>
-            </a></li>
-        </ul> <!-- end home-social -->
 
         <a href="#about" class="home-scroll smoothscroll">
             <span class="home-scroll__text">Scroll Down</span>
             <span class="home-scroll__icon"></span>
         </a> <!-- end home-scroll -->
 
+
     </section> <!-- end s-home -->
 
 
     <!-- about
     ================================================== -->
-    <section id='about' class="s-about">
+    <section id='about' class="s-about" data-parallax="scroll" data-image-src="images/space-robot-wallpaper.jpg" data-natural-width=1900 data-natural-height=1200 data-position-y=top>
 
         <div class="row section-header" data-aos="fade-up">
             <div class="col-full">
-                <h3 class="subhead">Who We Are</h3>
-                <h1 class="display-1">We are a group of design driven individuals passionate about creating beautiful UI designs.</h1>
+                <h3 class="subhead">Ako to funguje?</h3>
+                <h1 class="display-1">Postup</h1>
             </div>
         </div> <!-- end section-header -->
 
         <div class="row" data-aos="fade-up">
             <div class="col-full">
                 <p class="lead">
-                Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Donec rutrum congue leo eget malesuada. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse. 
+                Tato cast popisuje postup akym sposobom je mozne spustit vybrany test pre web. services.
                 </p>
             </div>
         </div> <!-- end about-desc -->

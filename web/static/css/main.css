@@ -1328,10 +1328,10 @@ input::-moz-focus-inner {
   margin: 0;
   padding: 0;
   position: absolute;
-  left: 110px;
-  top: 50%;
-  -webkit-transform: translateY(-50%);
-  -ms-transform: translateY(-50%);
+  left: 50px;
+  top: 80%;
+  -webkit-transform: translateY(-10%);
+  -ms-transform: translateY(-10%);
   transform: translateY(-50%);
 }
 .header-logo a {
@@ -1343,8 +1343,8 @@ input::-moz-focus-inner {
   transition: all 0.3s ease-in-out;
 }
 .header-logo img {
-  width: 200px;
-  height: 38px;
+  width: 400px;
+  height: 200px;
 }
 
 
