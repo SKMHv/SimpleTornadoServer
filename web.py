@@ -1,7 +1,6 @@
 import tornado.ioloop
 import tornado.web
-import time
-import time, random
+import random
 
 class ItWorks(tornado.web.RequestHandler):
     def get(self):
@@ -11,7 +10,7 @@ class WEBTester(tornado.web.RequestHandler):
     def get(self):
         citaty =[]
         try:
-            with open('web/static/citaty.txt', 'r', encoding='utf-8') as subor:
+            with open('web/citaty.txt', 'r', encoding='utf-8') as subor:
                 for riadok in subor:
                     riadok = riadok.strip()
                     citat = riadok.split(':')
@@ -21,23 +20,20 @@ class WEBTester(tornado.web.RequestHandler):
                 citat = random_citat[0]
                 citat_autor = random_citat.pop()
 
-
-
-
         except IOError:
             print('Subor "static/citaty.txt" sa nenasiel!!!')
 
-        self.render('web/index.html', title='Home', citat=citat, citat_autor=citat_autor)
+        self.render('web/index.html', title='Index')
 
 
 application = tornado.web.Application([
     #(r"/", ItWorks),
     (r"/", WEBTester),
-    (r"/images/(.*)",tornado.web.StaticFileHandler, {"path": "./web/static/images"},),
-    (r"/css/(.*)",tornado.web.StaticFileHandler, {"path": "./web/static/css"},),
-    (r"/fonts/(.*)", tornado.web.StaticFileHandler, {"path": "./web/static/fonts"},),
-    (r"/js/(.*)", tornado.web.StaticFileHandler, {"path": "./web/static/js"},),
-],debug=True)
+    (r"/jqvmap/(.*)", tornado.web.StaticFileHandler, {"path": "./jqvmap"},),
+    (r"/css/(.*)", tornado.web.StaticFileHandler, {"path": "./css"},),
+    (r"/fonts/(.*)", tornado.web.StaticFileHandler, {"path": "./fonts"},),
+    (r"/js/(.*)", tornado.web.StaticFileHandler, {"path": "./js"},),
+], debug=True)
 
 if __name__ == "__main__":
     PortNumber = str(7777)
