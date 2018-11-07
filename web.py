@@ -23,16 +23,18 @@ class WEBTester(tornado.web.RequestHandler):
         except IOError:
             print('Subor "static/citaty.txt" sa nenasiel!!!')
 
-        self.render('web/index.html', title='Index')
+        self.render('web/sign-in.html', title='sign-in')
 
 
 application = tornado.web.Application([
     #(r"/", ItWorks),
     (r"/", WEBTester),
+    (r"/web/(.*)", tornado.web.StaticFileHandler, {"path": "./web"},),
     (r"/jqvmap/(.*)", tornado.web.StaticFileHandler, {"path": "./jqvmap"},),
     (r"/css/(.*)", tornado.web.StaticFileHandler, {"path": "./css"},),
     (r"/fonts/(.*)", tornado.web.StaticFileHandler, {"path": "./fonts"},),
     (r"/js/(.*)", tornado.web.StaticFileHandler, {"path": "./js"},),
+    (r"/img/(.*)", tornado.web.StaticFileHandler, {"path": "./img"},),
 ], debug=True)
 
 if __name__ == "__main__":

@@ -1,7 +1,6 @@
 /* 
 
-Dashboard Template 
-http://www.templatemo.com/preview/templatemo_415_dashboard
+Dashboard Template
 
     1. CSS Imports
     2. General Styles
@@ -45,7 +44,7 @@ h1 { font-size: 30px; }
     margin-top: 0px;
     min-height: 600px;
     padding: 25px 20px 0 20px;
-    background-color: white;
+    background-color: silver;
     overflow-x: hidden;
 }
 .templatemo-footer {
@@ -69,7 +68,7 @@ h1 { font-size: 30px; }
     margin-bottom: 0;
     border-radius: 0;
 }
-.navbar-header { color: rgb(127,127,127); }
+.navbar-header { color: rgb(200,200,200); }
 .templatemo-sidebar {
     padding: 0;
     margin-top: 20px;
