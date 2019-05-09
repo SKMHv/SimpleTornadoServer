@@ -6,7 +6,7 @@ from dataclasses import replace
 from turtledemo.clock import datum
 import eMail_notification
 
-# -----------------------------------------------
+# ==============================================================================================
 
 form_data = {
     '__LASTFOCUS':'',
@@ -163,15 +163,39 @@ def notifi_oznamy(URL = "https://kp.gov.sk/pf/_layouts/PFSharePointProject/Login
         sys.exit(1)
 
 
+def notifi_odstavky():
+    try:
+        url_odstaviek = ["https://kp.gov.sk/pf/SitePages/technicke-odstavky-fix.aspx", "https://kp.gov.sk/pf/SitePages/technicke-odstavky.aspx"]
+        
+        for u in url_odstaviek:            
+            with requests.Session() as s:
+                p = s.post(u, data=form_data, headers=req_headers)
+                p = s.get(u)
+                print(p)
+                soup = BeautifulSoup(p.text)
+                loger("Nacital som stranku ... {}".format(u))
+                                
+                print("Som na stranke: " + soup.find('title').text.strip())
+                odstavky = soup.find_all("th", {"class": "ms-rteThemeForeColor-2-2 ms-rteTableFirstCol-default"}) 
+                print("Pocet oznamov na stranke '{}': ".format(u), len(odstavky))
+                print("=============================================")
+        
+    except Exception as e:
+        print(e)
 
+    
+
+# ==============================================================================================
 # odosli mailom
 sender_email = "michal.hvila@gmail.com"
 receiver_email = "hvila.michal@gmail.com"   
 subject_email = "Notifikacia oznamov z NASES ...."
 # xlbwwvmcortykbci    
-        
-mail_a = eMail_notification.Email(subject_email, sender_email, receiver_email, notifi_oznamy())
-mail_a.odosli()
-loger("Notifikacny email s oznamom bol odoslany ...")
+ 
+
+notifi_odstavky()       
+#mail_a = eMail_notification.Email(subject_email, sender_email, receiver_email, notifi_oznamy())
+#mail_a.odosli()
+#loger("Notifikacny email s oznamom bol odoslany ...")
     
 

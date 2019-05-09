@@ -91,3 +91,5 @@ datetime.now()-> ABC
 2019-05-05 23:17:49.729498 -> Nacital som stranku ... https://kp.gov.sk/pf/Lists/Oznamy
 2019-05-05 23:19:07.721707 -> Nacital som stranku ... https://kp.gov.sk/pf/Lists/Oznamy
 2019-05-05 23:21:02.259750 -> Nacital som stranku ... https://kp.gov.sk/pf/Lists/Oznamy
+2019-05-09 21:58:45.542813 -> Nacital som stranku ... https://kp.gov.sk/pf/SitePages/technicke-odstavky-fix.aspx
+2019-05-09 22:00:23.274870 -> Nacital som stranku ... https://kp.gov.sk/pf/SitePages/technicke-odstavky-fix.aspx
