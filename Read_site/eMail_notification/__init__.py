@@ -2,12 +2,6 @@ import smtplib, ssl
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-'''
-imap.dwcslovakia.sk:993
-smtp.dwcslovakia.sk:465
-'''
-
-
 
 sender_email = "michal.hvila@gmail.com"
 receiver_email = "hvila.michal@gmail.com"
@@ -56,7 +50,6 @@ class Email:
         # The email client will try to render the last part first
         #message.attach(part1)
         message.attach(part2)
-        # xlbwwvmcortykbci
         
         
         # Create secure connection with server and send email

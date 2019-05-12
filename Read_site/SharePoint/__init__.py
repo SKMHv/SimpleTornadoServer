@@ -5,6 +5,7 @@ from datetime import datetime
 from dataclasses import replace
 from turtledemo.clock import datum
 import eMail_notification
+from _datetime import date
 
 # ==============================================================================================
 
@@ -165,7 +166,9 @@ def notifi_oznamy(URL = "https://kp.gov.sk/pf/_layouts/PFSharePointProject/Login
 
 def notifi_odstavky(URL = "https://kp.gov.sk/pf/_layouts/PFSharePointProject/Login.aspx?ReturnUrl=%2fpf%2f_layouts%2fAuthenticate.aspx%3fSource%3d%252Fpf%252F&Source=%2Fpf%2F"):
     try:
-        import re
+        
+        aktual_datum = datetime.now().strftime("%-d.%-m.%Y")
+        print("Aktualny datum ... ", aktual_datum)
         url_odstaviek = ["https://kp.gov.sk/pf/SitePages/technicke-odstavky-fix.aspx", "https://kp.gov.sk/pf/SitePages/technicke-odstavky.aspx"]
         
         for u in url_odstaviek:   
@@ -174,14 +177,33 @@ def notifi_odstavky(URL = "https://kp.gov.sk/pf/_layouts/PFSharePointProject/Log
                 p = s.get(u)
                 soup = BeautifulSoup(p.text)
                 loger("Nacital som stranku ... {}".format(u))
-                                    
-                print("Som na stranke: " + soup.find("title").text.strip())                            
-                tabulka_odstavok = soup.find_all("table", {"class":"ms-rteFontSize-1 ms-rteTable-default", "class":"ms-rteTable-default"})
-                print(len(tabulka_odstavok))
+                title_url = soup.find("title").text.strip()                    
+                print("Som na stranke: " + title_url)                            
+                tabulky_odstavok = soup.find_all("table", {"class":"ms-rteFontSize-1 ms-rteTable-default", "class":"ms-rteTable-default"})
                 
-                #odstavky = soup.find_all("th", {"class": "ms-rteThemeForeColor-2-2 ms-rteTableFirstCol-default"}) # Datum
+                k = 0
+                for o in tabulky_odstavok:
+                    k += 1
+                    odstavky = o.find_all("tr")
+                    print("V tabulke {}. - pocet odstavok: {}".format(k,len(odstavky)))    
                 
-                #print("Pocet odstavok: ".format(u), len(odstavky))
+                
+                    for r in odstavky: 
+                        datum_odstavky = r.find("th", {"class":"ms-rteThemeForeColor-2-2 ms-rteTableFirstCol-default", "class":"ms-rteTableFirstCol-default"})
+                        
+                        if datum_odstavky:
+                            datum_odstavky = datum_odstavky.text.strip().replace(". ", ".")
+                            #print(datum_odstavky)
+                            
+# idem vytriedit odstavky za aktualny rok           
+                            odstavky_aktualrok = []                  
+                            if datum_odstavky.find(".2019") != -1:
+                                print(datum_odstavky)
+                                odstavky_aktualrok.append(r)
+                            
+                        #print("-------------------------------------------------------------")
+                
+                
                 print("=============================================")
              
     except Exception as e:
@@ -194,12 +216,11 @@ def notifi_odstavky(URL = "https://kp.gov.sk/pf/_layouts/PFSharePointProject/Log
 sender_email = "michal.hvila@gmail.com"
 receiver_email = "hvila.michal@gmail.com"   
 subject_email = "Notifikacia oznamov z NASES ...."
-# xlbwwvmcortykbci    
- 
 
 notifi_odstavky()       
 #mail_a = eMail_notification.Email(subject_email, sender_email, receiver_email, notifi_oznamy())
 #mail_a.odosli()
+
 #loger("Notifikacny email s oznamom bol odoslany ...")
-    
+# xlbwwvmcortykbci     
 
