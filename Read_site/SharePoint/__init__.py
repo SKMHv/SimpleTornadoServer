@@ -166,9 +166,6 @@ def notifi_oznamy(URL = "https://kp.gov.sk/pf/_layouts/PFSharePointProject/Login
 
 def notifi_odstavky(URL = "https://kp.gov.sk/pf/_layouts/PFSharePointProject/Login.aspx?ReturnUrl=%2fpf%2f_layouts%2fAuthenticate.aspx%3fSource%3d%252Fpf%252F&Source=%2Fpf%2F"):
     try:
-        
-        aktual_datum = datetime.now().strftime("%-d.%-m.%Y")
-        print("Aktualny datum ... ", aktual_datum)
         url_odstaviek = ["https://kp.gov.sk/pf/SitePages/technicke-odstavky-fix.aspx", "https://kp.gov.sk/pf/SitePages/technicke-odstavky.aspx"]
         
         for u in url_odstaviek:   
@@ -184,28 +181,54 @@ def notifi_odstavky(URL = "https://kp.gov.sk/pf/_layouts/PFSharePointProject/Log
                 k = 0
                 for o in tabulky_odstavok:
                     k += 1
-                    odstavky = o.find_all("tr")
-                    print("V tabulke {}. - pocet odstavok: {}".format(k,len(odstavky)))    
-                
+                    odstavky = o.find_all("tr")       
+                    
+                    table_data = []
+                    table = []
+    
                 
                     for r in odstavky: 
                         datum_odstavky = r.find("th", {"class":"ms-rteThemeForeColor-2-2 ms-rteTableFirstCol-default", "class":"ms-rteTableFirstCol-default"})
                         
                         if datum_odstavky:
-                            datum_odstavky = datum_odstavky.text.strip().replace(". ", ".")
-                            #print(datum_odstavky)
+                            datum_odstavky = datum_odstavky.text.strip().replace(". ",".").replace(",",", ")
+                            for j in ["\n","\xa0","\n","\u200b","\u200d"]:
+                                datum_odstavky = datum_odstavky.replace(j,"") 
+                            print(repr(datum_odstavky))
                             
 # idem vytriedit odstavky za aktualny rok                  
                             if datum_odstavky.find(".2019") != -1:
                                 print(datum_odstavky.split()[-1])
 
 # idem vytriedit iba platne odstavky
-                                odstavky_paltne = []
+                                        
+                                aktual_datum = datetime.now().strftime("%-d.%-m.%Y")
                                 
-
-                                odstavky_platne.append(r)
-                                
-                                
+                                #print("akt. datum ... ", datetime.strptime(aktual_datum, "%d.%m.%Y"))
+                                #print("Aktualny datum ... ", aktual_datum)
+                                odstavky_platne = []
+                                print(repr(datum_odstavky.split()[-1]))
+                                date = datetime.strptime(datum_odstavky.split()[-1], "%d.%m.%Y")     
+                                print(type(date))
+                                if date > datetime.strptime(aktual_datum, "%d.%m.%Y"):
+                                    #print("platny")
+                                    odstavky_platne.append(o)
+                    print("******************************************")                
+                    for p in odstavky_platne:
+                        td = p.find_all("td") 
+                        aktivity_odstavky = td.pop()
+                        koniec_odstavky = td.pop()
+                        zaciatok_odstavky = td.pop()
+                        datum_odstavky = td.pop()
+                        
+                        print("""datum_odstavky: {}
+                                 zaciatok_odstavky: {}
+                                 koniec_odstavky: {}
+                                 aktivity_odstavky: {}""".format(datum_odstavky.text,zaciatok_odstavky.text,koniec_odstavky.text,aktivity_odstavky.text))
+                         
+                        
+                         
+                                                        
 
                      
                 
