@@ -163,23 +163,27 @@ def notifi_oznamy(URL = "https://kp.gov.sk/pf/_layouts/PFSharePointProject/Login
         sys.exit(1)
 
 
-def notifi_odstavky():
+def notifi_odstavky(URL = "https://kp.gov.sk/pf/_layouts/PFSharePointProject/Login.aspx?ReturnUrl=%2fpf%2f_layouts%2fAuthenticate.aspx%3fSource%3d%252Fpf%252F&Source=%2Fpf%2F"):
     try:
+        import re
         url_odstaviek = ["https://kp.gov.sk/pf/SitePages/technicke-odstavky-fix.aspx", "https://kp.gov.sk/pf/SitePages/technicke-odstavky.aspx"]
         
-        for u in url_odstaviek:            
+        for u in url_odstaviek:   
             with requests.Session() as s:
-                p = s.post(u, data=form_data, headers=req_headers)
+                p = s.post(URL, data=form_data, headers=req_headers)
                 p = s.get(u)
-                print(p)
                 soup = BeautifulSoup(p.text)
                 loger("Nacital som stranku ... {}".format(u))
-                                
-                print("Som na stranke: " + soup.find('title').text.strip())
-                odstavky = soup.find_all("th", {"class": "ms-rteThemeForeColor-2-2 ms-rteTableFirstCol-default"}) 
-                print("Pocet oznamov na stranke '{}': ".format(u), len(odstavky))
+                                    
+                print("Som na stranke: " + soup.find("title").text.strip())                            
+                tabulka_odstavok = soup.find_all("table", {"class":"ms-rteFontSize-1 ms-rteTable-default", "class":"ms-rteTable-default"})
+                print(len(tabulka_odstavok))
+                
+                #odstavky = soup.find_all("th", {"class": "ms-rteThemeForeColor-2-2 ms-rteTableFirstCol-default"}) # Datum
+                
+                #print("Pocet odstavok: ".format(u), len(odstavky))
                 print("=============================================")
-        
+             
     except Exception as e:
         print(e)
 
