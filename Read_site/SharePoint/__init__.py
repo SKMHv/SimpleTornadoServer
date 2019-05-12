@@ -195,11 +195,20 @@ def notifi_odstavky(URL = "https://kp.gov.sk/pf/_layouts/PFSharePointProject/Log
                             datum_odstavky = datum_odstavky.text.strip().replace(". ", ".")
                             #print(datum_odstavky)
                             
-# idem vytriedit odstavky za aktualny rok           
-                            odstavky_aktualrok = []                  
+# idem vytriedit odstavky za aktualny rok                  
                             if datum_odstavky.find(".2019") != -1:
-                                print(datum_odstavky)
-                                odstavky_aktualrok.append(r)
+                                print(datum_odstavky.split()[-1])
+
+# idem vytriedit iba platne odstavky
+                                odstavky_paltne = []
+                                
+
+                                odstavky_platne.append(r)
+                                
+                                
+
+                     
+                
                             
                         #print("-------------------------------------------------------------")
                 
