@@ -232,3 +232,15 @@ datetime.now()-> ABC
 2019-05-13 22:38:26.300313 -> Nacital som stranku ... https://kp.gov.sk/pf/SitePages/technicke-odstavky-fix.aspx
 2019-05-13 22:38:32.524707 -> Nacital som stranku ... https://kp.gov.sk/pf/SitePages/technicke-odstavky.aspx
 2019-05-13 22:42:01.423134 -> Nacital som stranku ... https://kp.gov.sk/pf/SitePages/technicke-odstavky-fix.aspx
+2019-05-13 22:47:34.835876 -> Nacital som stranku ... https://kp.gov.sk/pf/SitePages/technicke-odstavky-fix.aspx
+2019-05-13 22:47:38.793469 -> Nacital som stranku ... https://kp.gov.sk/pf/SitePages/technicke-odstavky.aspx
+2019-05-13 22:48:47.142076 -> Nacital som stranku ... https://kp.gov.sk/pf/SitePages/technicke-odstavky-fix.aspx
+2019-05-13 22:48:53.469272 -> Nacital som stranku ... https://kp.gov.sk/pf/SitePages/technicke-odstavky.aspx
+2019-05-13 22:50:23.300286 -> Nacital som stranku ... https://kp.gov.sk/pf/SitePages/technicke-odstavky-fix.aspx
+2019-05-13 22:50:27.324122 -> Nacital som stranku ... https://kp.gov.sk/pf/SitePages/technicke-odstavky.aspx
+2019-05-13 22:51:55.424255 -> Nacital som stranku ... https://kp.gov.sk/pf/SitePages/technicke-odstavky-fix.aspx
+2019-05-13 22:51:59.066226 -> Nacital som stranku ... https://kp.gov.sk/pf/SitePages/technicke-odstavky.aspx
+2019-05-13 22:53:23.602827 -> Nacital som stranku ... https://kp.gov.sk/pf/SitePages/technicke-odstavky-fix.aspx
+2019-05-13 22:53:28.408121 -> Nacital som stranku ... https://kp.gov.sk/pf/SitePages/technicke-odstavky.aspx
+2019-05-13 22:54:04.173024 -> Nacital som stranku ... https://kp.gov.sk/pf/SitePages/technicke-odstavky-fix.aspx
+2019-05-13 22:54:08.393078 -> Nacital som stranku ... https://kp.gov.sk/pf/SitePages/technicke-odstavky.aspx

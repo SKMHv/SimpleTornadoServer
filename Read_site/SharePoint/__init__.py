@@ -169,6 +169,7 @@ def notifi_odstavky(URL = "https://kp.gov.sk/pf/_layouts/PFSharePointProject/Log
     try:
         url_odstaviek = ["https://kp.gov.sk/pf/SitePages/technicke-odstavky-fix.aspx", "https://kp.gov.sk/pf/SitePages/technicke-odstavky.aspx"]
         
+        
         for u in url_odstaviek:   
             with requests.Session() as s:
                 p = s.post(URL, data=form_data, headers=req_headers)
@@ -184,6 +185,7 @@ def notifi_odstavky(URL = "https://kp.gov.sk/pf/_layouts/PFSharePointProject/Log
                     k += 1
                     odstavky = o.find_all("tr")       
                     
+                    odstavky_platne = []
                     for r in odstavky:
                        #class_list = ["ms-rteThemeForeColor-2-2 ms-rteTableFooterFirstCol-default","ms-rteThemeForeColor-2-2 ms-rteTableFirstCol-default","ms-rteTableFirstCol-default"]
                         #datum_odstavkyA = r.find("th", {"class":"ms-rteThemeForeColor-2-2 ms-rteTableFooterFirstCol-default"}) 
@@ -194,24 +196,23 @@ def notifi_odstavky(URL = "https://kp.gov.sk/pf/_layouts/PFSharePointProject/Log
                             datum_odstavky = datum_odstavky.text.strip().replace(". ",".").replace(",",", ")
                             for j in ["\n","\xa0","\n","\u200b","\u200d"]:
                                 datum_odstavky = datum_odstavky.replace(j,"") 
-                            print(repr(datum_odstavky))
+                            #print(repr(datum_odstavky))
                             
 # idem vytriedit odstavky za aktualny rok                  
                             if datum_odstavky.find(".2019") != -1:
-                                print(datum_odstavky.split()[-1])
+                                #print(datum_odstavky.split()[-1])
 
 # idem vytriedit iba platne odstavky
                                         
                                 aktual_datum = datetime.now().strftime("%-d.%-m.%Y")
 
-                                odstavky_platne = []
-                                print(repr(datum_odstavky.split()[-1]))
+                                
+                                #print(repr(datum_odstavky.split()[-1]))
                                 date = datetime.strptime(datum_odstavky.split()[-1], "%d.%m.%Y")     
-                                print(type(date))
+                                #print(type(date))
                                 if date >= datetime.strptime(aktual_datum, "%d.%m.%Y"):
-                                    print("platny") 
-                                    odstavky_platne.append(r)
-                                    print("Pridal dom platny ....\n", r)    
+                                    #print("platny") 
+                                    odstavky_platne.append(r)    
                     print("******************************************")
                     
                     print("Pocet platnych ..... ",len(odstavky_platne))                  
@@ -221,9 +222,9 @@ def notifi_odstavky(URL = "https://kp.gov.sk/pf/_layouts/PFSharePointProject/Log
                         koniec_odstavky = td.pop()
                         zaciatok_odstavky = td.pop()
                         datum_odstavky = p.find("th").text
-                            
-                        #print("datum_odstavky: {}\nzaciatok_odstavky: {}\nkoniec_odstavky: {}\naktivity_odstavky: {}".format(datum_odstavky,zaciatok_odstavky.text,koniec_odstavky.text,aktivity_odstavky.text))
-                           
+                        print(">>>>>>>>>>>>>------------------------<<<<<<<<<<<<<<<<")    
+                        print("datum_odstavky: {}\nzaciatok_odstavky: {}\nkoniec_odstavky: {}\naktivity_odstavky: {}".format(datum_odstavky,zaciatok_odstavky.text,koniec_odstavky.text,aktivity_odstavky.text))
+                        print(">>>>>>>>>>>>>------------------------<<<<<<<<<<<<<<<<")   
                      
                 
                             
