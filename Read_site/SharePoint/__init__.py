@@ -6,6 +6,7 @@ from dataclasses import replace
 from turtledemo.clock import datum
 import eMail_notification
 from _datetime import date
+#from smtpd import class_
 
 # ==============================================================================================
 
@@ -183,12 +184,11 @@ def notifi_odstavky(URL = "https://kp.gov.sk/pf/_layouts/PFSharePointProject/Log
                     k += 1
                     odstavky = o.find_all("tr")       
                     
-                    table_data = []
-                    table = []
-    
-                
-                    for r in odstavky: 
-                        datum_odstavky = r.find("th", {"class":"ms-rteThemeForeColor-2-2 ms-rteTableFirstCol-default", "class":"ms-rteTableFirstCol-default"})
+                    for r in odstavky:
+                       #class_list = ["ms-rteThemeForeColor-2-2 ms-rteTableFooterFirstCol-default","ms-rteThemeForeColor-2-2 ms-rteTableFirstCol-default","ms-rteTableFirstCol-default"]
+                        #datum_odstavkyA = r.find("th", {"class":"ms-rteThemeForeColor-2-2 ms-rteTableFooterFirstCol-default"}) 
+                        #datum_odstavkyB = r.find("th", {"class":"ms-rteThemeForeColor-2-2 ms-rteTableFirstCol-default", "class":"ms-rteTableFirstCol-default","class":"ms-rteThemeForeColor-2-2 ms-rteTableFooterFirstCol-default"})
+                        datum_odstavky = r.find("th")
                         
                         if datum_odstavky:
                             datum_odstavky = datum_odstavky.text.strip().replace(". ",".").replace(",",", ")
@@ -203,33 +203,27 @@ def notifi_odstavky(URL = "https://kp.gov.sk/pf/_layouts/PFSharePointProject/Log
 # idem vytriedit iba platne odstavky
                                         
                                 aktual_datum = datetime.now().strftime("%-d.%-m.%Y")
-                                
-                                #print("akt. datum ... ", datetime.strptime(aktual_datum, "%d.%m.%Y"))
-                                #print("Aktualny datum ... ", aktual_datum)
+
                                 odstavky_platne = []
                                 print(repr(datum_odstavky.split()[-1]))
                                 date = datetime.strptime(datum_odstavky.split()[-1], "%d.%m.%Y")     
                                 print(type(date))
-                                if date > datetime.strptime(aktual_datum, "%d.%m.%Y"):
-                                    #print("platny")
-                                    odstavky_platne.append(o)
-                    print("******************************************")                
+                                if date >= datetime.strptime(aktual_datum, "%d.%m.%Y"):
+                                    print("platny") 
+                                    odstavky_platne.append(r)
+                                    print("Pridal dom platny ....\n", r)    
+                    print("******************************************")
+                    
+                    print("Pocet platnych ..... ",len(odstavky_platne))                  
                     for p in odstavky_platne:
                         td = p.find_all("td") 
                         aktivity_odstavky = td.pop()
                         koniec_odstavky = td.pop()
                         zaciatok_odstavky = td.pop()
-                        datum_odstavky = td.pop()
-                        
-                        print("""datum_odstavky: {}
-                                 zaciatok_odstavky: {}
-                                 koniec_odstavky: {}
-                                 aktivity_odstavky: {}""".format(datum_odstavky.text,zaciatok_odstavky.text,koniec_odstavky.text,aktivity_odstavky.text))
-                         
-                        
-                         
-                                                        
-
+                        datum_odstavky = p.find("th").text
+                            
+                        #print("datum_odstavky: {}\nzaciatok_odstavky: {}\nkoniec_odstavky: {}\naktivity_odstavky: {}".format(datum_odstavky,zaciatok_odstavky.text,koniec_odstavky.text,aktivity_odstavky.text))
+                           
                      
                 
                             
