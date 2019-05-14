@@ -51,7 +51,7 @@ def loger(text):
         with open("logs.txt", 'w') as file_b:
                 file_b.write(text)
         
-def porovnaj(new, last="oznamy.txt"):
+def porovnaj(new, last):
     """
     Funkcia porovna obsah new s obsahom v last="oznamy.txt",
     ak subor v last existuje a jeho obsah sa zhoduje s obshom v new, 
@@ -59,12 +59,13 @@ def porovnaj(new, last="oznamy.txt"):
     """
     if os.path.isfile(last) and new == open(last, 'r').read():
         print("\nObsahy sa zhoduju. Ukoncujem program....")
-        sys.exit()
+        return True
+        
     else:
         with open(last, 'w') as file_o:
             print("\nObsahy sa nezhoduju idem prepisat povodny obsah.")
             file_o.write(new) 
-            loger("Do 'oznamy.txt' som zapisal nove Oznamy ....")
+            loger("Do '.txt' som zapisal novy obsah ....")
 
 def notifi_oznamy(URL = "https://kp.gov.sk/pf/_layouts/PFSharePointProject/Login.aspx?ReturnUrl=%2fpf%2f_layouts%2fAuthenticate.aspx%3fSource%3d%252Fpf%252F&Source=%2Fpf%2F"):    
     """
@@ -89,7 +90,8 @@ def notifi_oznamy(URL = "https://kp.gov.sk/pf/_layouts/PFSharePointProject/Login
             for j in oznamy:
                 text_oznamy.append(j.text)
             print("\n".join(text_oznamy))
-            porovnaj("\n".join(text_oznamy),last="oznamy.txt")       
+            if porovnaj("\n".join(text_oznamy),last="oznamy.txt") == True:
+                sys.exit()       
                      
             oznamy_url = []
             table_data = []
@@ -168,7 +170,7 @@ def notifi_oznamy(URL = "https://kp.gov.sk/pf/_layouts/PFSharePointProject/Login
 def notifi_odstavky(URL = "https://kp.gov.sk/pf/_layouts/PFSharePointProject/Login.aspx?ReturnUrl=%2fpf%2f_layouts%2fAuthenticate.aspx%3fSource%3d%252Fpf%252F&Source=%2Fpf%2F"):
     try:
         url_odstaviek = ["https://kp.gov.sk/pf/SitePages/technicke-odstavky-fix.aspx", "https://kp.gov.sk/pf/SitePages/technicke-odstavky.aspx"]
-        
+        html_odstavky = []
         
         for u in url_odstaviek:   
             with requests.Session() as s:
@@ -181,17 +183,20 @@ def notifi_odstavky(URL = "https://kp.gov.sk/pf/_layouts/PFSharePointProject/Log
                 tabulky_odstavok = soup.find_all("table", {"class":"ms-rteFontSize-1 ms-rteTable-default", "class":"ms-rteTable-default"})
                 
                 k = 0
+                
                 for o in tabulky_odstavok:
+                    text_odstavky = ""
+                    table_odstavky = []
+                    html_odstavka = []
+                        
+                    html_odstavka.append("<h1>Notifikacia oznamov stranky {} ....</h1>\n".format(title_url))
+                    
                     k += 1
                     odstavky = o.find_all("tr")       
                     
                     odstavky_platne = []
-                    for r in odstavky:
-                       #class_list = ["ms-rteThemeForeColor-2-2 ms-rteTableFooterFirstCol-default","ms-rteThemeForeColor-2-2 ms-rteTableFirstCol-default","ms-rteTableFirstCol-default"]
-                        #datum_odstavkyA = r.find("th", {"class":"ms-rteThemeForeColor-2-2 ms-rteTableFooterFirstCol-default"}) 
-                        #datum_odstavkyB = r.find("th", {"class":"ms-rteThemeForeColor-2-2 ms-rteTableFirstCol-default", "class":"ms-rteTableFirstCol-default","class":"ms-rteThemeForeColor-2-2 ms-rteTableFooterFirstCol-default"})
+                    for r in odstavky:   
                         datum_odstavky = r.find("th")
-                        
                         if datum_odstavky:
                             datum_odstavky = datum_odstavky.text.strip().replace(". ",".").replace(",",", ")
                             for j in ["\n","\xa0","\n","\u200b","\u200d"]:
@@ -217,21 +222,77 @@ def notifi_odstavky(URL = "https://kp.gov.sk/pf/_layouts/PFSharePointProject/Log
                     
                     print("Pocet platnych ..... ",len(odstavky_platne))                  
                     for p in odstavky_platne:
+                        table_dataOdst = []
+                        
                         td = p.find_all("td") 
                         aktivity_odstavky = td.pop()
                         koniec_odstavky = td.pop()
                         zaciatok_odstavky = td.pop()
                         datum_odstavky = p.find("th").text
-                        print(">>>>>>>>>>>>>------------------------<<<<<<<<<<<<<<<<")    
-                        print("datum_odstavky: {}\nzaciatok_odstavky: {}\nkoniec_odstavky: {}\naktivity_odstavky: {}".format(datum_odstavky,zaciatok_odstavky.text,koniec_odstavky.text,aktivity_odstavky.text))
-                        print(">>>>>>>>>>>>>------------------------<<<<<<<<<<<<<<<<")   
-                     
-                
+
+
+                        # -------- HTML TABLE DATA ----------
+                        table_dataOdst.append(["Datum odstavky", datum_odstavky])
+                        table_dataOdst.append(["Zaciatok", zaciatok_odstavky])
+                        table_dataOdst.append(["Koniec", koniec_odstavky])
+                        
+    
+                        
+                        table_odstavky.append("<table style='text-align: left; width: 100%;' border='1' cellpadding='2'cellspacing='2'>\n")
+                        table_odstavky.append("<tbody>\n")
+                        
+                        
+                        for i in table_dataOdst:
+                            table_odstavky.append("\t<tr>\n")
+                            td = []
+                            for j in range(1):
+                                td.append("<td style='width: 150px;'><strong>{}</strong></td>".format(i[0]))
+                                td.append("<td style='width: 500px;'>{}</td>".format(i[1]))
                             
-                        #print("-------------------------------------------------------------")
+                            table_odstavky.append("\t\t"+"".join(td))
+                            table_odstavky.append("\n\t</tr>\n")
+                        
                 
+                        table_odstavky.append("<tr>\n")
+                        table_odstavky.append("<td colspan='2' rowspan='1' style='vertical-align: top;'>{}<br>\n".format(aktivity_odstavky))
+                        table_odstavky.append("</td>\n")
+                        table_odstavky.append("</tr>\n")
+                        
+                        table_odstavky.append("</tbody>\n")
+                        table_odstavky.append("</table>\n")
+                        table_odstavky.append("<p>&nbsp;</p>\n")
+                        
+                        table_dataOdst = []
+                        # ------------------------------------
+
+                        
+                        text_odstavky += """
+>>>>>>>>>>>>>------------------------<<<<<<<<<<<<<<<<
+datum_odstavky: {}
+zaciatok_odstavky: {}
+koniec_odstavky: {}
+aktivity_odstavky: {}
+>>>>>>>>>>>>>------------------------<<<<<<<<<<<<<<<<""".format(datum_odstavky,zaciatok_odstavky.text,koniec_odstavky.text,aktivity_odstavky.text)
+                        #print(text_odstavky)
+                    
+                    if title_url.find("fix") != -1:
+                        if porovnaj(text_odstavky, last="odstavky_fix.txt") == True:
+                            sys.exit()
+                    else:
+                        if porovnaj(text_odstavky, last="odstavky_prod.txt") == True:
+                            sys.exit()                    
+                    
+                    html_odstavka.append("".join(table_odstavky))
+                    html_odstavka = "".join(html_odstavka)
+                    
+                    html_odstavky.append(html_odstavka)
+                    print(html_odstavka)
                 
                 print("=============================================")
+        
+        print("Pocet HTML odstavok ...", len(html_odstavky))
+        
+        
              
     except Exception as e:
         print(e)

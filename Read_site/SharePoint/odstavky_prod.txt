@@ -1,0 +1,61 @@
+
+>>>>>>>>>>>>>------------------------<<<<<<<<<<<<<<<<
+datum_odstavky: Štvrtok, 16. 5. 2019
+zaciatok_odstavky: 0.00 hod​
+koniec_odstavky: 6.00 hod​
+aktivity_odstavky: ​Plánovaná pravidelná technická odstávka sa neuskutoční
+>>>>>>>>>>>>>------------------------<<<<<<<<<<<<<<<<
+>>>>>>>>>>>>>------------------------<<<<<<<<<<<<<<<<
+datum_odstavky: ​Sobota, 18. 5. 2019
+zaciatok_odstavky: 20.00 hod​
+koniec_odstavky: 4.00 hod​
+aktivity_odstavky: ​Plánovaná pravidelná technická odstávka ​​
+Modul CEP
+Release cep 5.1.0.46- ADMIN - úprava menu (vyhodená nepotrebná položka VIEW v časti Zásielky) - UPVSCEPv4 - zmena kódu chyby v podpísaní dokumentov 2 Podpísanie dokumentov2 - Keď je na vstupe aj podpis, tak sa skúmajú jeho objekty. Ak objekt nie je XDC a zároveň sa nepodarí podľa xsduri nájsť typ objektu - nová návratová hodnota bude 305 "Neznámy typ objektu". - Zmena výstupnej schémy pre informatívne overenie3 
+
+Release cep 5.1.0.47- Podpora čítania veľkých MC z centrálneho úložiska OST - Integrácia GT message queue - pridaná podpora volania G2G formou MQ namiesto WS - Pečatenie a overovanie ASiC-CAdES (informatívne overenie 3) - UPVSCEPv4 - úpravy v informatívnom overení 3 a vrátení podpísaných dát 2 - Informatívne overenie 3 
+vo výstupe element OverovanaPlatnostVnorenychPodpisovychKontajnerov premenovaný na OverovanaPlatnostVnorenychPodisov 
+vo výstupe element NepodpisanyDatovyObjektZEPfZIP.Data premenovaný na NepodpisanyDatovyObjektZEPfZIP.DataB64 
+vo výstupe element NepodpisanyDatovyObjektAsic.Data premenovaný na NepodpisanyDatovyObjektAsic.DataB64 
+vo výstupe doplnené napĺňanie elementu CertifikatCasovejPeciatky
+Vrátenie podpísaných dát 2 vo výstupe element NepodpisanyDatovyObjektZEPfZIP.Data premenovaný na NepodpisanyDatovyObjektZEPfZIP.DataB64 
+vo výstupe element NepodpisanyDatovyObjektAsic.Data premenovaný na NepodpisanyDatovyObjektAsic.DataB64 
+- Pre notifikácie o predbežnom/úplnom overení v BiznisObjekt.VysledokValidacieDatovehoObjektu platí vždy pre kód 1 - Platný, 2- Neplatný
+
+Release cep 5.1.0.48- Konfiguračné súbory pre overovače na základe TSL dostupných k 2019-01-21 - SUMÁR zmien 
+XAdES+CAdES: - úprava dátumu NotAfter Disig TSAPolicy ^1\.3\.158\.35975946\.0\.0\.1\.0\.4(\.\d+)*$ na 2025-11-04T08:36:41Z  - úprava CertRulesSets - v pravidlách pre SkQESig, QESig, AdES-QSig a AdESig vyhodená požiadavka na prítomnosť substringu PSEUDONYM v CN 
+XAdES: - úprava Default podpisovej politiky: - zmena platnosti NotAfter na 2024-12-31T23:59:59Z - zmena AlgAndLength pre všetky RSA a DSA na 1900 
+- Sprístupnenie MQ a MC optimalizácie - pridané konfiguračné hodnoty pre sprístupnenie MQ a MC
+
+Release cep 5.1.0.49- Doplnené logovanie v službe Overenia podpisu - ak vstupné dáta pre WS overenie podpisu nie sú DataEnvelope, DataSignatures alebo MessageContainer- Prechod na 64 bit SoftHSM - Vylepšenie Ditec.UPVSCep.BusFac.ProcessStarter.exe - Defaultne processStarter žiadny adresár nevytvára, predpokladá jeho existenciu. Ak adresár neexistuje, tak vypíše chybu: „adresár 'c:\!' neexistuje, vytvorte ho, alebo použite prepínač /c na jeho automatické vytvorenie“ a skončí- Ak použijeme aj prepínač „/c“ tak sa adresár automaticky vytvorí – so všetkými úrovňami, napr. ProcessStarter /t „c:\tasky\temp1“ /c - Ak neexistuje ani c:\tasky, tak založí aj ten a následne pod nim temp1 - Na poradí prepínačov nezáleží - „/c /t PATH“ alebo „/t PATH /c“- Naplnenie KodVysledokuOverenia pre asic-xades formát Do EPCISASICVysledokOverenia sme napĺňali výsledok overenia, do kategórie sme plnili enum SignatureVerificationOutput.SubIndication ako string, ale mali sme ukladať jeho číselnú hodnotu, schéma pre G2G notifikáciu PrijatieVysledkuOverenia* vyžaduje integer: <xs:element name="KodVysledkuOverenia" type="Number" minOccurs="1" />
+
+Release cep 5.1.0.50- Dopĺňať xmlns="http://schemas.gov.sk/cep/g2g" do elementu PrijatieDorucenkyEnvelope v prípade, že sa doručenka posiela do MQ. - Synchronizácia typu objektu z eForm zip - vyhľadávanie existujúceho formulára v evidencii EKR: V synchronizácii zip formulárov z eFormu - do vyhľadávania doplnený nový parameter verzia. - UPVS-CEPv4 - oprava mimetype pri zaevidovaní podania a formátu podpisu asic-cades - ORACLE doplnenie mapovania pre procedúru odosielania záznamu do G2G: nebolo doplnené mapovanie na typ eidas podpisu do DO vrstvy - nové konfiguračné súbory pre overovače na základe TSL dostupných k 2019-02-14 - Odoslanie záznamu do IS - chyba pri vytváraní dát biznis objektu pre neoveriteľné dokumenty
+
+Release cep 5.1.0.51- Zaevidované podania PAdES, kontrola počtu podpisov – ak je počet podpisov 0, vytvorí sa neoveriteľná autorizácia. - Performance countre pre IZServices.svc a EKR.asmx Kontrola, či existuje pre každú WS metódu (na EKR.asmx a IZServices.svc) správne nastavené performance počítadlo a kontrola implementácie increment / decrement perf counter. - UPVSCEPv4 - informatívne overenie 3  vrátenie podpísaných dát 2 - doplnenie údajov z XMLDataContainer-a v ASIC-XADES podpise do výstupu zo služieb
+
+Release cep 5.1.0.52- Úprava EKR voči OST API 1.2.0 - úprava prístupu do OST API, kvôli Basic autentifikácii - Podpísanie dokumentov 2               Rozšírenie identifikátora o poradie objektu v rámci podpisovania formou postfixu "_x" kde x je poradie. Týmto bude zabezpečené odlíšenie identifikátorov. - UPVSCEPv4 – informatívne overenie 3 vrátenie podpísaných dát 2 - rozšírenie výstupu pre asic-cades - doplnenie informácií o vloženej schéme/transformácii z XML Data kontajnera
+
+Release cep 5.1.0.53- Ukladanie RoutingInfo - mazanie na základe MessageId (duplicity)- UPVSCEPv4 - klapka pre CP Implementácia vypnutia žiadania časových pečiatok v prípade, že sa neúspešne vyžiadalo X pečiatok z dôvodu neznámeho podpisového certifikátu v časovej pečiatke. X je konfiguračná hodnota nastaviteľná admin konzolou v číselníku konfigurácií. Pokiaľ X nie je uvedené alebo nie je celé číslo, proces nevyhodnocuje počet neúspešných pečiatok a žiada ich stále bez obmedzenia. - Aktualizácia KEP komponentov z dôvodu vytvárania správnej B64 kódovanej, rozlišovanie asic-xades s a e foriem. - Nová verzia TestUpvs aplikácie: 1. horné "taby" presunuté do ľavej časti do prehľadného menu 2. nad poliami z textovými vstupmi/výstupmi pre dáta dorobené kontextové menu (pravý klik myši) pre načítanie dát zo súboru, vloženie mena súboru a uloženie obsahu do súboru 3. upravené umiestnenia niektorých komponentov (tlačidlá, vstupné polia) tak, aby sa neposúvali pri zmene veľkosti okna 4. rozloženie prvkov v jednotlivých častiach TestUPVS aplikácie sa nezmenilo
+
+Release cep 5.1.0.54- Update KEP komponentov - oprava kódovania špeciálnych znakov v URI. - Oprava procedúry na zisťovanie Podpisovej politiky Release v4.20171220_patch20190233/UPVS_CEP_5.1.0.53.zip obsahoval bug procedúry EPCISPodpisovaPolitikaGetByIdentifikator. Odstránenie bugu nasadením správnej procedúry.
+
+Release cep 5.1.0.55- nové konfiguračné súbory pre overovače na základe TSL dostupných k 2019-03-28. - Novy endpoint pre MQ broker v PKS - vrátenie padesu iba 1x v službe informatívneho overenia 3 Ak je v PADESe viac podpisov, tak sa vráti iba jeden dátový objekt, ostatné sa referencujú. - Informatívne overenie - nastavenie príznaku PritomnyXDC         PritomnyXDC vo výstupe IO3 sa v prípade nenastavenia v kóde vracia ako null. - Update KEP komponentov - doplnenie Ditec.Zep.Pki.DSignerSvrXades.Core.dll. - Napĺňanie formátu súboru pre ASiC-XAdES podpis v Informatívnom overení 3 Rozlišovanie typu kontajnera (ASIC-S/ASIC-E) aj vo výstupe v elemente formát súboru služby Informatívne overenie 3 v prípade asic-xades podpisu na základe informácií z asic factory.
+
+Release cep 5.1.0.56- Optimalizácia procedúry CPKICRLBuildPath pre skladanie crl cesty. - CR_74_Dátum vzniku Zásielky Do tabuľky Zásielka pridaný nový atribút Dátum a čas vzniku v UTC. Pre nové záznamy sa nastaví pri vytvorení na aktuálny dátum a čas, pre existujúce záznamy sa nastaví podľa Zásielka.História stavov zásielky. Dátum a čas začiatku platnosti v UTC pre záznam kde Zásielka.História stavov zásielky.Stav.Názov = Nová - CR_75_Dátum vzniku Zásielky_ADMIN Do prehľadu zásielok a detailu zásielky ako aj prehľadu dokumentov na podpis a detailu pribudne možnosť filtrovať/zobrazovať dátum a čas vzniku zásielky na základe novovzniknutého stĺpca. - update serverových KEP komponent Odstránenie zalomenia Base64 pri použití triedy XmlDataContainer na parsovanie XDC v komponente D.Signer-SVR-XAdES PKI. DverifierSvrXades - spracovanie zalomených B64 reťazcov, ako aj vytváranie nových zalomených (pre odtlačky, certifikáty, ocsp) vo vyšších formách, upgrade na verziu 3.2.0.0 - Aktualizácia store.db3 pre Neprodukčné prostredia pre qes signer z dôvodu aktualizácie expirovaných liniek. - Ladenie Admin aplikácie - fix DB prociek pre List Podanie a Zásielka
+
+Release cep 5.1.0.57- UPVSCEPv4 - úprava napĺňania mimetype pre asic pri vytváraní MC pred zaevidovaním podania Úprava "Overenie podpisu", "Úplné overenie ZEP", "Prevod ZEP na archívnu formu" - napĺňanie konkrétneho mimetype namiesto x-asic pri tvorbe MC. Úprava test aplikácie vo väzbe na napĺňanie mimetype (možnosť vložiť aj podpis v binárnej forme). - UPVSCEPv4 - WS EP Určenie typu a formy podpisu a upravené napĺňanie mimetype pre asic-xades upravené napĺňanie parametra mimetype na základe údajov z asiv factory - Správne vyhodnotenie neoveriteľnej autorizácie pri ASIC-Cades podpise - ADMIN - Doplnenie mimetype pre správne zobrazovanie Ak má prijatý objekt mimetype „application/vnd.gov.sk.xmldatacontainer+xml“ alebo „application/vnd.gov.sk.xmldatacontainer+xml; charset=UTF-8“, tak zobrazovať ako XML. - Výpočet c14n kanonikalizácie pre Informatívne overenie2 - hodnota DigestValue do výpočtov kanonikalizácie pre hash [hodnota DigestValue] doplnené aj mimetype text/xml a „application/vnd.gov.sk.xmldatacontainer+xml“ - aktualizácia KEP komponent a súvisiace úpravy - úprava kódu podateľne - údaje z ASIC-Xades podpisu pre XML elementy a ostatné dáta
+
+Release cep 5.1.0.58ADMIN - Zmena stavu v prijatej autorizácii ASIC-XAdES UPVSCEPv4 - vrátenie xdc pre asic-cades v informatívnom overení 3 - vrátenie celej XMLDataContainer štruktúry vo výstupe, miest jej obsahu (XML) UPVSCEPv4 - Zosúladenie modelu s kódom - Podpísanie dokumentov 1 pre vetvu podpísania asic-cades sa doplnili známe mimetype o "application/txt" - Zaevidovanie podania - Chybná konverzia xml objektov pri antivírovej kontrole v xades_zep 
+
+Modul eDesk3.2.7- Aktualizácia WSDL CEP - 3.3. Detail správy - Vizualizácia XMLDataContainer v elektronickej schránke, ak obsahuje vloženú vizualizačnú transformáciu 
+
+Modul MDURZverzia 24- Oprava podpisovania PDF (pri selektívnej diseminácii)
+verzia 25- Úprava procesu uvoľňovania diskového úložiska  - Oprava - zobrazovanie informácie o neoveriteľných podpisoch (namiesto "pravdepodobne platný" sa uvedie "neoverený")  - Oprava - správne určenie doby platnosti integritného podpisu rozšíreného na A formu
+
+>>>>>>>>>>>>>------------------------<<<<<<<<<<<<<<<<
+>>>>>>>>>>>>>------------------------<<<<<<<<<<<<<<<<
+datum_odstavky: Štrvtok, 13. 6. 2019​
+zaciatok_odstavky: 0.00 hod​
+koniec_odstavky: 6.00 hod​
+aktivity_odstavky: ​Plánovaná pravidelná technická odstávka ​
+>>>>>>>>>>>>>------------------------<<<<<<<<<<<<<<<<
