@@ -1,5 +1,6 @@
 import requests, sys
 import os.path
+
 from bs4 import BeautifulSoup
 from datetime import datetime
 from dataclasses import replace
@@ -58,14 +59,14 @@ def porovnaj(new, last):
     tak sa program ukonci. Ak sa nezhoduju, tak sa obsah z new zapise do last.      
     """
     if os.path.isfile(last) and new == open(last, 'r').read():
-        print("\nObsahy sa zhoduju. Ukoncujem program....")
+        print("Porovnaj(): Obsahy sa zhoduju.")
         return True
         
     else:
         with open(last, 'w') as file_o:
-            print("\nObsahy sa nezhoduju idem prepisat povodny obsah.")
+            print("Porovnaj(): Obsahy sa nezhoduju idem prepisat povodny obsah.")
             file_o.write(new) 
-            loger("Do '.txt' som zapisal novy obsah ....")
+            loger("Porovnaj(): Do '.txt' som zapisal novy obsah ....")
 
 def notifi_oznamy(URL = "https://kp.gov.sk/pf/_layouts/PFSharePointProject/Login.aspx?ReturnUrl=%2fpf%2f_layouts%2fAuthenticate.aspx%3fSource%3d%252Fpf%252F&Source=%2Fpf%2F"):    
     """
@@ -166,8 +167,13 @@ def notifi_oznamy(URL = "https://kp.gov.sk/pf/_layouts/PFSharePointProject/Login
         print(e)
         sys.exit(1)
 
-
 def notifi_odstavky(URL = "https://kp.gov.sk/pf/_layouts/PFSharePointProject/Login.aspx?ReturnUrl=%2fpf%2f_layouts%2fAuthenticate.aspx%3fSource%3d%252Fpf%252F&Source=%2Fpf%2F"):
+    """
+    Funkcia sa prihlasi do portalu Partner Framework Portal nacita si odstavky zo stranky odstavky fix + prod, 
+    porovna atributy s povodnou verziou '.txt', ak sa zhoduju, tak sa ukonci program, 
+    ak sa nezhoduju, tak sa zapise nova verzia obsahov do '.txt' nasledne sa z kazdej 
+    odstavky nacitaju potrebne atributy, vysklada sa HTML tabulka s oznamami a vrati pole tabuliek za fix a prod.   
+    """
     try:
         url_odstaviek = ["https://kp.gov.sk/pf/SitePages/technicke-odstavky-fix.aspx", "https://kp.gov.sk/pf/SitePages/technicke-odstavky.aspx"]
         html_odstavky = []
@@ -189,7 +195,7 @@ def notifi_odstavky(URL = "https://kp.gov.sk/pf/_layouts/PFSharePointProject/Log
                     table_odstavky = []
                     html_odstavka = []
                         
-                    html_odstavka.append("<h1>Notifikacia oznamov stranky {} ....</h1>\n".format(title_url))
+                    html_odstavka.append("<h1>Notifikacia zmien odstavok stranky {} ....</h1>\n".format(title_url))
                     
                     k += 1
                     odstavky = o.find_all("tr")       
@@ -201,47 +207,45 @@ def notifi_odstavky(URL = "https://kp.gov.sk/pf/_layouts/PFSharePointProject/Log
                             datum_odstavky = datum_odstavky.text.strip().replace(". ",".").replace(",",", ")
                             for j in ["\n","\xa0","\n","\u200b","\u200d"]:
                                 datum_odstavky = datum_odstavky.replace(j,"") 
-                            #print(repr(datum_odstavky))
                             
-# idem vytriedit odstavky za aktualny rok                  
-                            if datum_odstavky.find(".2019") != -1:
-                                #print(datum_odstavky.split()[-1])
-
-# idem vytriedit iba platne odstavky
-                                        
+                            # idem vytriedit odstavky za aktualny rok                  
+                            if datum_odstavky.find(".2019") != -1:                                        
                                 aktual_datum = datetime.now().strftime("%-d.%-m.%Y")
-
-                                
-                                #print(repr(datum_odstavky.split()[-1]))
                                 date = datetime.strptime(datum_odstavky.split()[-1], "%d.%m.%Y")     
-                                #print(type(date))
+                                
+                                # idem vytriedit iba platne odstavky
                                 if date >= datetime.strptime(aktual_datum, "%d.%m.%Y"):
                                     #print("platny") 
                                     odstavky_platne.append(r)    
-                    print("******************************************")
-                    
                     print("Pocet platnych ..... ",len(odstavky_platne))                  
                     for p in odstavky_platne:
                         table_dataOdst = []
                         
-                        td = p.find_all("td") 
+                        td = p.find_all("td")
+                        
                         aktivity_odstavky = td.pop()
-                        koniec_odstavky = td.pop()
-                        zaciatok_odstavky = td.pop()
-                        datum_odstavky = p.find("th").text
-
+                        aktivity_odstavky_children = aktivity_odstavky.find_all(recursive=False)
+                        aktivity_odstavky = ""
+                        for children in aktivity_odstavky_children:
+                            aktivity_odstavky += str(children) 
+                        
+                        koniec_odstavky = td.pop().text
+                        for j in ["\xa0","\u200b","\u200d"]:
+                                koniec_odstavky = koniec_odstavky.replace(j,"")
+                        
+                        zaciatok_odstavky = td.pop().text
+                        for j in ["\xa0","\u200b","\u200d"]:
+                                zaciatok_odstavky = zaciatok_odstavky.replace(j,"")
+                        
+                        datum_odstavky = p.find("th").text                   
 
                         # -------- HTML TABLE DATA ----------
                         table_dataOdst.append(["Datum odstavky", datum_odstavky])
                         table_dataOdst.append(["Zaciatok", zaciatok_odstavky])
-                        table_dataOdst.append(["Koniec", koniec_odstavky])
-                        
-    
-                        
+                        table_dataOdst.append(["Koniec", koniec_odstavky])        
                         table_odstavky.append("<table style='text-align: left; width: 100%;' border='1' cellpadding='2'cellspacing='2'>\n")
                         table_odstavky.append("<tbody>\n")
-                        
-                        
+                                            
                         for i in table_dataOdst:
                             table_odstavky.append("\t<tr>\n")
                             td = []
@@ -254,14 +258,15 @@ def notifi_odstavky(URL = "https://kp.gov.sk/pf/_layouts/PFSharePointProject/Log
                         
                 
                         table_odstavky.append("<tr>\n")
-                        table_odstavky.append("<td colspan='2' rowspan='1' style='vertical-align: top;'>{}<br>\n".format(aktivity_odstavky))
+                        table_odstavky.append("<td colspan='2' rowspan='1' style='vertical-align: top;'>")
+                        table_odstavky.append(aktivity_odstavky)
+                        table_odstavky.append("<br>\n")
                         table_odstavky.append("</td>\n")
                         table_odstavky.append("</tr>\n")
                         
                         table_odstavky.append("</tbody>\n")
                         table_odstavky.append("</table>\n")
                         table_odstavky.append("<p>&nbsp;</p>\n")
-                        
                         table_dataOdst = []
                         # ------------------------------------
 
@@ -272,26 +277,37 @@ datum_odstavky: {}
 zaciatok_odstavky: {}
 koniec_odstavky: {}
 aktivity_odstavky: {}
->>>>>>>>>>>>>------------------------<<<<<<<<<<<<<<<<""".format(datum_odstavky,zaciatok_odstavky.text,koniec_odstavky.text,aktivity_odstavky.text)
-                        #print(text_odstavky)
+>>>>>>>>>>>>>------------------------<<<<<<<<<<<<<<<<""".format(datum_odstavky,zaciatok_odstavky,koniec_odstavky,aktivity_odstavky)
+                    
                     
                     if title_url.find("fix") != -1:
+                        porovnaj_fix = False
+                        porovnaj_prod = False
                         if porovnaj(text_odstavky, last="odstavky_fix.txt") == True:
-                            sys.exit()
+                            print(" ... pokracujem na odstavky produkcie")
+                            porovnaj_fix = True
+                            break
+                    
                     else:
                         if porovnaj(text_odstavky, last="odstavky_prod.txt") == True:
-                            sys.exit()                    
+                            porovnaj_prod = True
+                            break
+                             
+                                                
                     
+                    if porovnaj_fix & porovnaj_prod != False:
+                        print(" .... ukoncujem tymto cely program")
+                        sys.exit()
+                   
                     html_odstavka.append("".join(table_odstavky))
                     html_odstavka = "".join(html_odstavka)
                     
+                    #print(html_odstavka)
                     html_odstavky.append(html_odstavka)
-                    print(html_odstavka)
-                
+    
                 print("=============================================")
-        
-        print("Pocet HTML odstavok ...", len(html_odstavky))
-        
+                print("=============================================")
+        return html_odstavky        
         
              
     except Exception as e:
@@ -303,11 +319,11 @@ aktivity_odstavky: {}
 # odosli mailom
 sender_email = "michal.hvila@gmail.com"
 receiver_email = "hvila.michal@gmail.com"   
-subject_email = "Notifikacia oznamov z NASES ...."
+subject_email = "Notifikacia zmien odstavok z NASES ...."
 
-notifi_odstavky()       
-#mail_a = eMail_notification.Email(subject_email, sender_email, receiver_email, notifi_oznamy())
-#mail_a.odosli()
+for i in notifi_odstavky():       
+    mail_a = eMail_notification.Email(subject_email, sender_email, receiver_email, i)
+    mail_a.odosli()
 
 #loger("Notifikacny email s oznamom bol odoslany ...")
 # xlbwwvmcortykbci     
