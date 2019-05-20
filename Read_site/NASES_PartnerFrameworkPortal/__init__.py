@@ -7,6 +7,7 @@ from dataclasses import replace
 from turtledemo.clock import datum
 import eMail_notification
 from _datetime import date
+from _ast import Try
 #from smtpd import class_
 
 # ==============================================================================================
@@ -32,8 +33,6 @@ req_headers = {
     'Referer': 'https://kp.gov.sk/pf/_layouts/PFSharePointProject/Login.aspx?ReturnUrl=%2fpf%2f_layouts%2fAuthenticate.aspx%3fSource%3d%252Fpf%252F&Source=%2Fpf%2F',
     'Connection': 'keep-alive'    
     }
-
-
 
 prox = {'http': 'http://www.someproxy.com:3128'}
 
@@ -63,10 +62,8 @@ def porovnaj(new, last):
         return True
         
     else:
-        with open(last, 'w') as file_o:
-            print("Porovnaj(): Obsahy sa nezhoduju idem prepisat povodny obsah.")
-            file_o.write(new) 
-            loger("Porovnaj(): Do '.txt' som zapisal novy obsah ....")
+        print("Porovnaj(): Obsahy sa nezhoduju.")
+        return False
 
 def notifi_oznamy(URL = "https://kp.gov.sk/pf/_layouts/PFSharePointProject/Login.aspx?ReturnUrl=%2fpf%2f_layouts%2fAuthenticate.aspx%3fSource%3d%252Fpf%252F&Source=%2Fpf%2F"):    
     """
@@ -91,15 +88,18 @@ def notifi_oznamy(URL = "https://kp.gov.sk/pf/_layouts/PFSharePointProject/Login
             for j in oznamy:
                 text_oznamy.append(j.text)
             print("\n".join(text_oznamy))
-            if porovnaj("\n".join(text_oznamy),last="oznamy.txt") == True:
-                sys.exit()       
+            #===================================================================
+            # if porovnaj("\n".join(text_oznamy),last="oznamy.txt") == True:
+            #     sys.exit()       
+            #===================================================================
                      
             oznamy_url = []
             table_data = []
             html_oznam = []
             table = []
             
-            html_oznam.append("<h1>Notifikacia oznamov ....</h1>\n")
+            html_oznam.append("<h1>Notifikacia zmien oznamov k {} ....</h1>\n".format(str(datetime.now())))
+            
             
             for i in oznamy:
                 predmet_oznamu = i.find("a",{"onfocus":"OnLink(this)"}).text.strip()
@@ -195,7 +195,7 @@ def notifi_odstavky(URL = "https://kp.gov.sk/pf/_layouts/PFSharePointProject/Log
                     table_odstavky = []
                     html_odstavka = []
                         
-                    html_odstavka.append("<h1>Notifikacia zmien odstavok stranky {} ....</h1>\n".format(title_url))
+                    html_odstavka.append("<h1>Notifikacia zmien odstavok stranky {} k {} ....</h1>\n".format(title_url,str(datetime.now())))
                     
                     k += 1
                     odstavky = o.find_all("tr")       
@@ -269,7 +269,6 @@ def notifi_odstavky(URL = "https://kp.gov.sk/pf/_layouts/PFSharePointProject/Log
                         table_odstavky.append("<p>&nbsp;</p>\n")
                         table_dataOdst = []
                         # ------------------------------------
-
                         
                         text_odstavky += """
 >>>>>>>>>>>>>------------------------<<<<<<<<<<<<<<<<
@@ -280,24 +279,25 @@ aktivity_odstavky: {}
 >>>>>>>>>>>>>------------------------<<<<<<<<<<<<<<<<""".format(datum_odstavky,zaciatok_odstavky,koniec_odstavky,aktivity_odstavky)
                     
                     
-                    if title_url.find("fix") != -1:
-                        porovnaj_fix = False
-                        porovnaj_prod = False
-                        if porovnaj(text_odstavky, last="odstavky_fix.txt") == True:
-                            print(" ... pokracujem na odstavky produkcie")
-                            porovnaj_fix = True
-                            break
-                    
-                    else:
-                        if porovnaj(text_odstavky, last="odstavky_prod.txt") == True:
-                            porovnaj_prod = True
-                            break
-                             
-                                                
-                    
-                    if porovnaj_fix & porovnaj_prod != False:
-                        print(" .... ukoncujem tymto cely program")
-                        sys.exit()
+                    #===========================================================
+                    # if title_url.find("fix") != -1:
+                    #     porovnaj_fix = False
+                    #     porovnaj_prod = False
+                    #     if porovnaj(text_odstavky, last="odstavky_fix.txt") == True:
+                    #         print(" ... pokracujem na odstavky produkcie")
+                    #         porovnaj_fix = True
+                    #         break
+                    # 
+                    # else:
+                    #     if porovnaj(text_odstavky, last="odstavky_prod.txt") == True:
+                    #         porovnaj_prod = True
+                    #         break
+                    #          
+                    #                             
+                    # if porovnaj_fix & porovnaj_prod != False:
+                    #     print(" .... ukoncujem tymto cely program")
+                    #     sys.exit()
+                    #===========================================================
                    
                     html_odstavka.append("".join(table_odstavky))
                     html_odstavka = "".join(html_odstavka)
@@ -308,23 +308,8 @@ aktivity_odstavky: {}
                 print("=============================================")
                 print("=============================================")
         return html_odstavky        
-        
              
     except Exception as e:
         print(e)
 
     
-
-# ==============================================================================================
-# odosli mailom
-sender_email = "michal.hvila@gmail.com"
-receiver_email = "hvila.michal@gmail.com"   
-subject_email = "Notifikacia zmien odstavok z NASES ...."
-
-for i in notifi_odstavky():       
-    mail_a = eMail_notification.Email(subject_email, sender_email, receiver_email, i)
-    mail_a.odosli()
-
-#loger("Notifikacny email s oznamom bol odoslany ...")
-# xlbwwvmcortykbci     
-
