@@ -24,8 +24,8 @@ try:
             if porovnaj(i, last) != True:        
                 mail_a = eMail_notification.Email(subject_email, sender_email, receiver_email, i)
                 mail_a.odosli()
-                with open(last, 'w') as file_o:
-                    file_o.write(i) 
+                with open(last, 'w') as file_f:
+                    file_f.write(i) 
                     loger("Odoslal som email + do 'odstavky_fix.html' som zapisal novy obsah ....")
             else:
                 print("Z dovody zhody verzii sa neodoslal mail")
@@ -36,8 +36,8 @@ try:
             if porovnaj(i, last) != True:
                 mail_a = eMail_notification.Email(subject_email, sender_email, receiver_email, i)
                 mail_a.odosli()
-                with open(last, 'w') as file_o:
-                    file_o.write(i) 
+                with open(last, 'w') as file_p:
+                    file_p.write(i) 
                     loger("Odoslal som email + do 'odstavky_prod.html' som zapisal novy obsah ....")
             else:
                 print("Z dovody zhody verzii sa neodoslal mail")

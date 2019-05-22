@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import requests, sys
 import os.path
 
@@ -53,10 +54,11 @@ def loger(text):
         
 def porovnaj(new, last):
     """
-    Funkcia porovna obsah new s obsahom v last="oznamy.txt",
+    Funkcia porovna obsah new s obsahom v last=".txt",
     ak subor v last existuje a jeho obsah sa zhoduje s obshom v new, 
-    tak sa program ukonci. Ak sa nezhoduju, tak sa obsah z new zapise do last.      
+    vrati True. Ak sa nezhoduju, tak sa vrati False.      
     """
+    #new = repr(new)
     if os.path.isfile(last) and new == open(last, 'r').read():
         print("Porovnaj(): Obsahy sa zhoduju.")
         return True
@@ -84,10 +86,12 @@ def notifi_oznamy(URL = "https://kp.gov.sk/pf/_layouts/PFSharePointProject/Login
             print("Pocet oznamov na stranke: ", len(oznamy))
             print("=============================================")
             
-            text_oznamy = []
-            for j in oznamy:
-                text_oznamy.append(j.text)
-            print("\n".join(text_oznamy))
+            #===================================================================
+            # text_oznamy = []
+            # for j in oznamy:
+            #     text_oznamy.append(j.text)
+            # print("\n".join(text_oznamy))
+            #===================================================================
             #===================================================================
             # if porovnaj("\n".join(text_oznamy),last="oznamy.txt") == True:
             #     sys.exit()       
@@ -98,7 +102,7 @@ def notifi_oznamy(URL = "https://kp.gov.sk/pf/_layouts/PFSharePointProject/Login
             html_oznam = []
             table = []
             
-            html_oznam.append("<h1>Notifikacia zmien oznamov k {} ....</h1>\n".format(str(datetime.now())))
+            html_oznam.append("<h1>Notifikacia zmien oznamov ...</h1>\n")
             
             
             for i in oznamy:
@@ -113,7 +117,7 @@ def notifi_oznamy(URL = "https://kp.gov.sk/pf/_layouts/PFSharePointProject/Login
                     soup = BeautifulSoup(p.text)
                     
                     nadpis_oznamu = soup.find("td", {"id":"SPFieldText"}).text.strip()
-                    text_oznamu = soup.find("div", {"class":"ms-rtestate-field"}).text.strip()
+                    text_oznamu = soup.find("div", {"class":"ms-rtestate-field"})
                     koniec_oznamu = soup.find("td", {"id":"SPFieldDateTime"}).text.strip().replace(". ", ".")
                     #vytvoril_oznam = soup.find("a", {"onclick":"GoToLinkOrDialogNewWindow(this);return false;"}).text.strip()
                     vytvoril_dna = soup.find("span", {"id":"ctl00_m_g_d75f40a2_19e3_49ce_9df0_870bf5e6fac7_ctl00_toolBarTbl_RptControls_ctl00_ctl00_ctl00"}).text.strip()
@@ -160,6 +164,11 @@ def notifi_oznamy(URL = "https://kp.gov.sk/pf/_layouts/PFSharePointProject/Login
                     
             html_oznam.append("".join(table))
             html_oznam = "".join(html_oznam)
+            #===================================================================
+            # for j in ["\xa0","\u200b","\u200d"]:
+            #                     html_oznam = html_oznam.replace(j,"")
+            #===================================================================
+            html_oznam = html_oznam.strip() 
             return html_oznam
             
                
@@ -195,7 +204,7 @@ def notifi_odstavky(URL = "https://kp.gov.sk/pf/_layouts/PFSharePointProject/Log
                     table_odstavky = []
                     html_odstavka = []
                         
-                    html_odstavka.append("<h1>Notifikacia zmien odstavok stranky {} k {} ....</h1>\n".format(title_url,str(datetime.now())))
+                    html_odstavka.append("<h1>Notifikacia zmien odstavok stranky {} ...</h1>\n".format(title_url))
                     
                     k += 1
                     odstavky = o.find_all("tr")       

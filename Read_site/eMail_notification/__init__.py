@@ -66,7 +66,7 @@ class Email:
 # ----------------------------------------------------------- 
             
 #mail_a = Email(subject_email, sender_email, receiver_email, text_email)
-#mail_a.odosli()
+#mail_a.odosli(xlbwwvmcortykbci)
 
 
 
